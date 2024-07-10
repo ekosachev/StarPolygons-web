@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>StarPolygons: Web</title>
+        <link rel="stylesheet" href="/static/styles.css">
+        <link rel="stylesheet" href="/static/bootstrap-grid.css">
+    </head>
+    <body>
+        <header>
+            <img src="../static/spNOBGNOTXT.ico" alt="Icon" class="header-icon">
+            <h1>StarPolygons: Web</h1>
+        </header>
+        <div class="row">
+            <div class="col-5">
+                <div class="card" style="height: 30rem">
+                    Настройки
+                    <form method="post" action="/set_params">
+                        <div class="form-field">
+                            <label for="n">Количество вершин</label>
+                            <input type="number" name="n" id="n">
+                        </div>
+                        <div class="form-field">
+                            <label for="m">Шаг</label>
+                            <input type="number" name="m" id="m">
+                        </div>
+                        <div class="form-field">
+                            <label for="r">Радиус описанной окружности</label>
+                            <input type="number" name="r" id="r">
+                        </div>
+                        <button type="submit">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="card" style="height: 30rem">
+                    Картинка с ЗМ
+                    <img src="{{ path_to_image }}" alt="Картинка с ЗМ">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
