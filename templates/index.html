@@ -5,11 +5,15 @@
         <title>StarPolygons: Web</title>
         <link rel="stylesheet" href="/static/styles.css">
         <link rel="stylesheet" href="/static/bootstrap-grid.css">
+        <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
     </head>
     <body>
         <header>
-            <img src="../static/spNOBGNOTXT.ico" alt="Icon" class="header-icon">
-            <h1>StarPolygons: Web</h1>
+            <img src="../static/spNOBGNOTXT.ico" alt="Icon" class="header-icon" style="margin-right: 15px">
+            <div style="display: flex; flex-direction: column">
+                <h1 style="margin-bottom: 0">StarPolygons: Web</h1>
+                <h4 style="margin-top: 0">Все созвездия геометрии в одном приложении</h4>
+            </div>
         </header>
         <div class="row">
             <div class="col-5">
@@ -18,26 +22,286 @@
                     <form method="post" action="/set_params">
                         <div class="form-field">
                             <label for="n">Количество вершин</label>
-                            <input type="number" name="n" id="n">
+                            <input type="number" name="n" id="n" value="{{ n }}" autocomplete="off" required>
                         </div>
                         <div class="form-field">
                             <label for="m">Шаг</label>
-                            <input type="number" name="m" id="m">
+                            <input type="number" name="m" id="m" value="{{ m }}" autocomplete="off" required>
                         </div>
                         <div class="form-field">
                             <label for="r">Радиус описанной окружности</label>
-                            <input type="number" name="r" id="r">
+                            <input type="number" name="r" id="r" value="{{ r }}" autocomplete="off" required>
                         </div>
-                        <button type="submit">Сохранить</button>
+                        <button type="submit">Построить звездчатый многоугольник</button>
                     </form>
+                    <div class="form-field">
+                        Длина стороны: {{ '%0.3f' % a if a is not none else "Не вычислено" }}
+                    </div>
+                    <div class="form-field">
+                        Периметр: {{ '%0.3f' % p if p is not none else "Не вычислено" }}
+                    </div>
+                    <div class="form-field">
+                        Площадь: {{ '%0.3f' % s if s is not none else "Не вычислено" }}
+                    </div>
+
                 </div>
             </div>
             <div class="col-7">
                 <div class="card" style="height: 30rem">
-                    Картинка с ЗМ
-                    <img src="{{ path_to_image }}" alt="Картинка с ЗМ">
+                    <img src="{{ path_to_image }}" alt="Картинка с ЗМ" class="polygon_image">
                 </div>
             </div>
         </div>
+        <div class="band">
+            <span>
+                Теория по звездчатым многоугольникам
+            </span>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card" style="height: 15rem">
+                    <h3>Обозначения</h3>
+                    <ul>
+                        <li>n - количество вершин</li>
+                        <li>m - шаг</li>
+                        <li>ЗМ - звездчатый многоугольник</li>
+                        <li>СВ - связный звездчатый многоугольник</li>
+                        <li>НСВ - несвязный звездчатый многоугольник</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card center-content" style="height: 15rem">
+                    <img src="../static/formula_m.png" alt="2 < m < n/2" class="centered" style="width: 50%; height: auto">
+                </div>
+            </div>
+        </div>
+        <div class="band">
+            <span>
+                Галерея
+            </span>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="card" style="height: 30rem">
+                    <table style="width: 100%">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <th colspan="4">
+                                    Шаг
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Кол-во вершин</th>
+                                {% for foo in [2, 3, 4, 5] %}
+                                    <th>{{ foo }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tr>
+                            <th>5</th>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=5&m=2"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>6</th>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=6&m=2"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>7</th>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=7&m=2"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=7&m=3"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>8</th>
+                            <td class="ncon">НСВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=8&m=3"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>9</th>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=9&m=2"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=9&m=3"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=9&m=4"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>10</th>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=10&m=2"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=10&m=3"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=10&m=4"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>11</th>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=11&m=2"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=11&m=3"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=11&m=4"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=11&m=5"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                        </tr>
+                        <tr>
+                            <th>12</th>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=12&m=2"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=12&m=3"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td
+                                    class="ncon"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=12&m=4"
+                                    hx-swap="innerHTML"
+                            >НСВ</td>
+                            <td
+                                    class="con"
+                                    hx-trigger="click"
+                                    hx-target="#gallery-display"
+                                    hx-get="/gallery?n=12&m=5"
+                                    hx-swap="innerHTML"
+                            >СВ</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="card" style="height: 30rem" id="gallery-display">
+                    <img class="polygon_image" src="/gallery_image/5-2-1.png" alt="Изображение ЗМ">
+                </div>
+            </div>
+        </div>
+        <div class="band">
+            <span>
+                Связность и несвязность звездчатого многоугольника
+            </span>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <ul>
+                        <li>Связный ЗМ представляет собой единый замкнутый контур</li>
+                        <li>Несвязный ЗМ состоит из нескольких отдельных замкнутых контуров</li>
+                    </ul>
+                    <h3>
+                        Условие связности звездчатого многоугольника
+                    </h3>
+                    ЗМ является связным тогда и только тогда, когда количество его вершин и шаг - <b>взаимно простые числа</b> (не имеют общих делителей кроме единицы)
+                </div>
+            </div>
+        </div>
+        <footer>
+            <span>
+                Сайт разработан для проекта StarPolygons Большой Математической Мастерской 2024 <br>
+                Команда проекта StarPolygons выражает благодарность Новосибирскому Государственному Университету за предоставленную возможность
+            </span>
+        </footer>
     </body>
 </html>

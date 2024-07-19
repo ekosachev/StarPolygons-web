@@ -24,7 +24,7 @@ header {
     padding: 15px;
     align-items: center;
     justify-content: flex-start;
-
+    height: 100px;
 }
 
 .card {
@@ -37,7 +37,7 @@ header {
 }
 
 .header-icon {
-    width: 75px;
+    width: 80px;
     height: auto;
 }
 
@@ -53,3 +53,63 @@ header {
     display: inline-block;
 }
 
+.polygon_image {
+    height: 100%;
+    width: auto;
+}
+
+.band {
+    background-color: var(--dark);
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.band > * {
+    display: inline-block;
+    color: var(--background);
+    font-size: 25px;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+th {
+    width: min-content;
+}
+
+.con {
+    color: #3f9b15;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.con:hover {
+    color: #70bd4e;
+    transition: all 0.3s ease;
+}
+
+.ncon {
+    color: #d6522e;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ncon:hover {
+    color: #e77858;
+    transition: all 0.3s ease;
+}
+
+footer {
+    background-color: #1E1E1E;
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #F9F9F9;
+}

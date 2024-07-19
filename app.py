@@ -26,8 +26,15 @@ def hello_world():  # put application's code here
         path_to_image=f'.{path}',
         a=a,
         s=s,
-        p=p
+        p=p,
+        n=n,
+        m=m,
+        r=r,
     )
+
+@app.route('/cache/<filename>')
+def get_cached_image(filename):
+    return flask.send_file(f'./cache/{filename}', mimetype='image/png')
 
 @app.route('/favicon.ico')
 def favicon():
@@ -42,6 +49,20 @@ def set_params():
     m = int(flask.request.form['m'])
     r = int(flask.request.form['r'])
     return flask.redirect(f'/?n={n}&m={m}&r={r}')
+
+@app.route('/gallery')
+def gallery():
+    n = flask.request.args.get('n')
+    m = flask.request.args.get('m')
+    return flask.render_template(
+        'gallery.html',
+        path=f"/gallery_image/{n}-{m}-1.png"
+    )
+
+@app.route('/gallery_image/<filename>')
+def get_gallery_image(filename):
+    return flask.send_file(f'./gallery/{filename}', mimetype='image/png')
+
 
 
 if __name__ == '__main__':

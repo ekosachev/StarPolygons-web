@@ -3,11 +3,11 @@ from math import tau, cos, sin, degrees, sqrt
 from PIL import Image, ImageDraw
 
 
-def generate_polygon(n: int, m: int, r: float, save: bool) -> tuple[float, float, float]:
+def generate_polygon(n: int, m: int, r: float, save: bool, path: str = './cache') -> tuple[float, float, float]:
     points = []
     theta = tau / n
 
-    COLOR_BG = (108, 188, 226)
+    COLOR_BG = (227, 227, 227)
     COLOR_EDGE = (30, 22, 33)
     SIZE = (1024, 1024)
     SCALE = 450
@@ -43,11 +43,8 @@ def generate_polygon(n: int, m: int, r: float, save: bool) -> tuple[float, float
     intersections = []
 
     alpha = (tau / 4 * (n - 2 * m)) / n
-    print(degrees(alpha))
     beta = theta / 2
-    print(degrees(beta))
     gamma = tau / 2 - alpha - beta
-    print(degrees(gamma))
 
     rad = sin(alpha) / sin(gamma)
 
@@ -97,17 +94,7 @@ def generate_polygon(n: int, m: int, r: float, save: bool) -> tuple[float, float
                 width=5
             )
 
-        for point in intersections:
-            imageDraw.ellipse(
-                (
-                    point[0] * SCALE + SIZE[0] // 2 - 5,
-                    point[1] * SCALE + SIZE[1] // 2 - 5,
-                    point[0] * SCALE + SIZE[0] // 2 + 5,
-                    point[1] * SCALE + SIZE[1] // 2 + 5,
-                ),
-                fill=COLOR_EDGE
-            )
-        image.save('./cache/{}-{}-{}.png'.format(n, m, r))
+        image.save('{}/{}-{}-{}.png'.format(path, n, m, r))
 
     return (
         sqrt((edges[0][1][0] - edges[0][0][0]) ** 2 + (edges[0][1][1] - edges[0][0][1]) ** 2) * r,
