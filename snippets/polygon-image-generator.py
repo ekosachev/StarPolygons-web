@@ -24,7 +24,7 @@ argumentParser.add_argument(
     '--skip',
     required=True,
     type=int,
-    help='Number of vertices that are skipped when generating the polygon',
+    help='Number of edges that are skipped when generating the polygon',
 )
 
 argumentParser.add_argument(
@@ -45,8 +45,8 @@ args = argumentParser.parse_args()
 print(args)
 
 vertices = args.vertices
-skip = args.skip
-step = skip + 1
+skip = args.skip - 1
+step = skip
 anim = args.anim
 
 if vertices < 5:
@@ -54,7 +54,7 @@ if vertices < 5:
     exit(1)
 
 if skip >= (vertices - 1):
-    print("Skip must be strictly less than the number of vertices minus 1")
+    print("Step must be strictly less than the number of vertices minus 1")
     exit(1)
 
 points = []
